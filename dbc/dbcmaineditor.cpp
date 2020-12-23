@@ -236,7 +236,7 @@ void DBCMainEditor::onTreeDoubleClicked(const QModelIndex &index)
     Q_UNUSED(index)
 
     QTreeWidgetItem* firstCol = ui->treeDBC->currentItem();
-    bool ret = false;
+//    bool ret = false;
     DBC_MESSAGE *msg;
     DBC_SIGNAL *sig;
     DBC_NODE *node;

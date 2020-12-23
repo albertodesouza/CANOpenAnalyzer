@@ -112,6 +112,91 @@ public:
         }
     }
 
+    static QString formatCANOpenFunction(uint64_t id, bool extended)
+    {
+//        if (decimalMode) return QString::number(id, 10);
+
+        if (extended)
+        {
+            return "0x" + QString::number(id, 16).toUpper().rightJustified(8,'0');
+        }
+        else
+        {
+            int func = (id & 0x7FF) >> 7;
+            switch(func)
+            {
+            case 0:
+                return "NMT";
+                break;
+            case 1:
+                if ((id & 0x7F) == 0)
+                    return "SYNC";
+                else
+                    return "EMCY";
+                break;
+            case 2:
+                return "TIME";
+                break;
+            case 3:
+                return "T PDO1";
+                break;
+            case 4:
+                return "R PDO1";
+                break;
+            case 5:
+                return "T PDO2";
+                break;
+            case 6:
+                return "R PDO2";
+                break;
+            case 7:
+                return "T PDO3";
+                break;
+            case 8:
+                return "R PDO3";
+                break;
+            case 9:
+                return "T PDO4";
+                break;
+            case 10://1010
+                return "R PDO4";
+                break;
+            case 11://1011
+                return "T SDO";
+                break;
+            case 12://1100
+                return "R SDO";
+                break;
+            case 13://1101
+                return "???";
+                break;
+            case 14://1110
+                return "HBEAT";
+                break;
+            case 15://1111
+                return "LSS";
+                break;
+            default:
+                return "?????";
+            }
+        }
+    }
+
+    static QString formatCANOpenNode(uint64_t id, bool extended)
+    {
+        if (decimalMode) return QString::number(id, 10);
+
+        if (extended)
+        {
+            return "0x" + QString::number(id, 16).toUpper().rightJustified(8,'0');
+        }
+        else
+        {
+            id = id & 0x7F;
+            return "0x" + QString::number(id, 16).toUpper().rightJustified(3,'0');
+        }
+    }
+
     static QString formatCANID(uint64_t id)
     {
         if (id < 0x800) return formatCANID(id, false);

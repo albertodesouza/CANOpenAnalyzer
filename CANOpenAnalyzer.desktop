@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=SavvyCAN
-GenericName=CANBus reverse engineering tool
-Comment=Facilitates reverse engineering of canbus captures
-Exec=SavvyCAN
-Icon=SavvyCAN
+Name=CANOpenAnalyzer
+GenericName=CANOpen reverse engineering tool
+Comment=Facilitates reverse engineering of canopen captures
+Exec=CANOpenAnalyzer
+Icon=CANOpenAnalyzer
 Terminal=false
 Categories=Development;Electronics;IDE;
 MimeType=text/x-application;

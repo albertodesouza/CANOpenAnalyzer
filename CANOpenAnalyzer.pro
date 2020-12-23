@@ -13,7 +13,7 @@ CONFIG += NO_UNIT_TESTS
 
 DEFINES += QCUSTOMPLOT_USE_OPENGL
 
-TARGET = SavvyCAN
+TARGET = CANOpenAnalyzer
 TEMPLATE = app
 
 SOURCES += main.cpp\
@@ -219,14 +219,14 @@ unix {
       PREFIX=/usr/local
    }
    target.path = $$PREFIX/bin
-   shortcutfiles.files=SavvyCAN.desktop
+   shortcutfiles.files=CANOpenAnalyzer.desktop
    shortcutfiles.path = $$PREFIX/share/applications
    INSTALLS += shortcutfiles
-   DISTFILES += SavvyCAN.desktop
+   DISTFILES += CANOpenAnalyzer.desktop
 }
 
 examplefiles.files=examples
-examplefiles.path = $$PREFIX/share/savvycan/examples
+examplefiles.path = $$PREFIX/share/CANOpenAnalyzer/examples
 INSTALLS += examplefiles
 
 iconfiles.files=icons

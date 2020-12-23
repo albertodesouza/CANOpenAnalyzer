@@ -13,15 +13,15 @@
 enum class Column {
     TimeStamp       = 0,  ///< The timestamp when the frame was transmitted or received
     FrameId         = 1,  ///< The frames CAN identifier (Standard: 11 or Extended: 29 bit)
-    Extended        = 2,  ///< True if the frames CAN identifier is 29 bit
-    Remote          = 3,  ///< True if the frames is a remote frame
-    Direction       = 4,  ///< Whether the frame was transmitted or received
-    Bus             = 5,  ///< The bus where the frame was transmitted or received
-    Length          = 6,  ///< The frames payload data length
-    ASCII           = 7,  ///< The payload interpreted as ASCII characters
-    Data            = 8,  ///< The frames payload data
-    CANOpenFunction = 9,  ///< CANOpen Function Code
-    CANOpenNode     = 10, ///< CANOpen Node
+    CANOpenNode     = 2, ///< CANOpen Node
+    CANOpenFunction = 3,  ///< CANOpen Function Code
+    Data            = 4,  ///< The frames payload data
+    Remote          = 5,  ///< True if the frames is a remote frame
+    Direction       = 6,  ///< Whether the frame was transmitted or received
+    Bus             = 7,  ///< The bus where the frame was transmitted or received
+    Extended        = 8,  ///< True if the frames CAN identifier is 29 bit
+    Length          = 9,  ///< The frames payload data length
+    ASCII           = 10,  ///< The payload interpreted as ASCII characters
     NUM_COLUMN
 };
 

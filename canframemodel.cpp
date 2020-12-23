@@ -166,7 +166,7 @@ void CANFrameModel::setOverwriteMode(bool mode)
 
 void CANFrameModel::setFilterState(unsigned int ID, bool state)
 {
-    if (!filters.contains(ID)) return;
+    if (!filters.contains(ID & 0x7F)) return;
     filters[ID] = state;
     sendRefresh();
 }
@@ -341,7 +341,7 @@ void CANFrameModel::recalcOverwrite()
 
     for (int i = 0; i < frames.count(); i++)
     {
-        if (filters[frames[i].frameId()])
+        if (filters[frames[i].frameId() & 0x7F])
         {
             filteredFrames.append(frames[i]);
         }
@@ -502,6 +502,10 @@ QVariant CANFrameModel::data(const QModelIndex &index, int role) const
                 }
             }
             return tempString;
+        case Column::CANOpenFunction:
+            return Utility::formatCANOpenFunction(thisFrame.frameId(), thisFrame.hasExtendedFrameFormat());
+        case Column::CANOpenNode:
+            return Utility::formatCANOpenNode(thisFrame.frameId(), thisFrame.hasExtendedFrameFormat());
         default:
             return tempString;
         }
@@ -579,20 +583,20 @@ void CANFrameModel::addFrame(const CANFrame& frame, bool autoRefresh = false)
     lastUpdateNumFrames++;
 
     //if this ID isn't found in the filters list then add it and show it by default
-    if (!filters.contains(tempFrame.frameId()))
+    if (!filters.contains(tempFrame.frameId() & 0x7F))
     {
         // if there are any filters already configured, leave the new filter disabled
         if (any_filters_are_configured())
-            filters.insert(tempFrame.frameId(), false);
+            filters.insert(tempFrame.frameId() & 0x7F, false);
         else
-            filters.insert(tempFrame.frameId(), true);
+            filters.insert(tempFrame.frameId() & 0x7F, true);
         needFilterRefresh = true;
     }
 
     if (!overwriteDups)
     {
         frames.append(tempFrame);
-        if (filters[tempFrame.frameId()])
+        if (filters[tempFrame.frameId() & 0x7F])
         {
             if (autoRefresh) beginInsertRows(QModelIndex(), filteredFrames.count(), filteredFrames.count());
             tempFrame.frameCount = 1;
@@ -617,7 +621,7 @@ void CANFrameModel::addFrame(const CANFrame& frame, bool autoRefresh = false)
         if (!found)
         {
             frames.append(tempFrame);
-            if (filters[tempFrame.frameId()])
+            if (filters[tempFrame.frameId() & 0x7F])
             {
                 if (autoRefresh) beginInsertRows(QModelIndex(), filteredFrames.count(), filteredFrames.count());
                 tempFrame.frameCount = 1;
@@ -664,7 +668,7 @@ void CANFrameModel::sendRefresh()
     int count = frames.count();
     for (int i = 0; i < count; i++)
     {
-        if (filters[frames[i].frameId()])
+        if (filters[frames[i].frameId() & 0x7F])
         {
             tempContainer.append(frames[i]);
         }
@@ -740,12 +744,12 @@ void CANFrameModel::insertFrames(const QVector<CANFrame> &newFrames)
     for (int i = 0; i < newFrames.count(); i++)
     {
         frames.append(newFrames[i]);
-        if (!filters.contains(newFrames[i].frameId()))
+        if (!filters.contains(newFrames[i].frameId() & 0x7F))
         {
-            filters.insert(newFrames[i].frameId(), true);
+            filters.insert(newFrames[i].frameId() & 0x7F, true);
             needFilterRefresh = true;
         }
-        if (filters[newFrames[i].frameId()])
+        if (filters[newFrames[i].frameId() & 0x7F])
         {
             insertedFiltered++;
             filteredFrames.append(newFrames[i]);
@@ -791,8 +795,8 @@ void CANFrameModel::loadFilterFile(QString filename)
         {
             QList<QByteArray> tokens = line.split(',');
             ID = tokens[0].toInt(nullptr, 16);
-            if (tokens[1].toUpper() == "T") filters.insert(ID, true);
-                else filters.insert(ID, false);
+            if (tokens[1].toUpper() == "T") filters.insert(ID & 0x7F, true);
+                else filters.insert(ID & 0x7F, false);
         }
     }
     inFile->close();

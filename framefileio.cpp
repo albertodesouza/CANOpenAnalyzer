@@ -2546,7 +2546,7 @@ bool FrameFileIO::saveIXXATFile(QString filename, const QVector<CANFrame>* frame
         return false;
     }
 
-    outFile->write("ASCII Trace IXXAT SavvyCAN V" + QString::number(VERSION).toUtf8() + "\n");
+    outFile->write("ASCII Trace CANOpenAnalyzer" + QString::number(VERSION).toUtf8() + "\n");
     outFile->write("Date: " + timestamp.toString("d:M:yyyy").toUtf8() + "\n");
     outFile->write("Start time: " + timestamp.toString("h:m:s").toUtf8() + "\n");
     timestamp = timestamp.addMSecs((frames->last().timeStamp().microSeconds() - frames->first().timeStamp().microSeconds()) / 1000);
@@ -2929,7 +2929,7 @@ bool FrameFileIO::saveMicrochipFile(QString filename, const QVector<CANFrame>* f
     outFile->write("//---------------------------------\n");
     outFile->write("Microchip Technology Inc.\n");
     outFile->write("CAN BUS Analyzer\n");
-    outFile->write("SavvyCAN Exporter\n");
+    outFile->write("CANOpenAnalyzer Exporter\n");
     outFile->write("Logging Started: ");
     outFile->write(timestamp.toString("d/M/yyyy h:m:s").toUtf8());
     outFile->write("\n");
@@ -3142,7 +3142,7 @@ bool FrameFileIO::saveTraceFile(QString filename, const QVector<CANFrame> * fram
         return false;
     }
 
-    outFile->write(";  SavvyCAN CAN Logger trace file\n");
+    outFile->write(";  CANOpenAnalyzer CAN Logger trace file\n");
     outFile->write(";  Device Serial Number : 0000 \n");
     outFile->write(";  Start Time : ");
     outFile->write(timestamp.toString("ddd, MMM dd, yyyy :: h:m:s\n").toUtf8());
