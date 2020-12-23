@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     selfRef = this;
 
-    this->setWindowTitle("Savvy CAN V" + QString::number(VERSION));
+    this->setWindowTitle("Savvy CAN with CANOpen ver" + QString::number(VERSION));
 
     model = new CANFrameModel(this); // set parent to mainwindow to prevent canframemodel to change thread (might be done by setModel but just in case)
 
@@ -460,7 +460,8 @@ void MainWindow::gridClicked(QModelIndex idx)
     {
         ui->canFramesView->setRowHeight(idx.row(), normalRowHeight);
     }
-    else {
+    else
+    {
         ui->canFramesView->resizeRowToContents(idx.row());
     }
 }

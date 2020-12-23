@@ -217,6 +217,12 @@ uint64_t CANFrameModel::getCANFrameVal(int row, Column col)
         for (int i = 0; i < frame.payload().length(); i++) temp += (static_cast<uint64_t>(frame.payload()[i]) << (56 - (8 * i)));
         //qDebug() << temp;
         return temp;
+
+    case Column::CANOpenFunction:
+        return frame.frameId() >> 7;
+    case Column::CANOpenNode:
+        return frame.frameId() & 0x7f;
+
     case Column::NUM_COLUMN:
         return 0;
     }
@@ -534,11 +540,14 @@ QVariant CANFrameModel::headerData(int section, Qt::Orientation orientation,
             return QString(tr("ASCII"));
         case Column::Data:
             return QString(tr("Data"));
+        case Column::CANOpenFunction:
+            return QString(tr("Func"));
+        case Column::CANOpenNode:
+            return QString(tr("Node"));
         default:
             return QString("");
         }
     }
-
     else
         return QString::number(section + 1);
 
