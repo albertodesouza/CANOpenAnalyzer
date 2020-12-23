@@ -1,6 +1,7 @@
-# SavvyCAN
-Qt based cross platform canbus tool 
-(C) 2015-2018 EVTV and Collin Kidder
+# CANOpenAnalyzer
+A fork of the Qt based cross platform canbus tool SavvyCAN, created by EVTV and Collin Kidder (https://www.savvycan.com/)
+
+The text below comes from SavvyCAN git (https://github.com/collin80/SavvyCAN).
 
 A Qt5 based cross platform tool which can be used to load, save, and capture canbus frames.
 This tool is designed to help with visualization, reverse engineering, debugging, and
