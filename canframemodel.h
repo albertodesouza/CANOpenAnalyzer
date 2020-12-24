@@ -64,6 +64,12 @@ public:
     const QVector<CANFrame> *getListReference() const; //thou shalt not modify these frames externally!
     const QVector<CANFrame> *getFilteredListReference() const; //Thus saith the Lord, NO.
     const QMap<int, bool> *getFiltersReference() const; //this neither
+    void set_filterNMTon(bool state) {filterNMTon = state; sendRefresh();};
+    void set_filterSYNCon(bool state) {filterSYNCon = state; sendRefresh();};
+    void set_filterEMCYon(bool state) {filterEMCYon = state; sendRefresh();};
+    void set_filterHBEATon(bool state) {filterHBEATon = state; sendRefresh();};
+    void set_filterTIMEon(bool state) {filterTIMEon = state; sendRefresh();};
+    bool filterFrameConsideringFunction(int frame_id);
 
 public slots:
     void addFrame(const CANFrame&, bool);
@@ -81,6 +87,11 @@ private:
     QVector<CANFrame> frames;
     QVector<CANFrame> filteredFrames;
     QMap<int, bool> filters;
+    bool filterNMTon;
+    bool filterSYNCon;
+    bool filterEMCYon;
+    bool filterHBEATon;
+    bool filterTIMEon;
     DBCHandler *dbcHandler;
     QMutex mutex;
     bool interpretFrames; //should we use the dbcHandler?

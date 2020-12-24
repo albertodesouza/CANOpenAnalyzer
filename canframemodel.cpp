@@ -301,6 +301,88 @@ void CANFrameModel::sortByColumn(int column)
     sendRefresh();
 }
 
+bool CANFrameModel::filterFrameConsideringFunction(int frame_id)
+{
+    // Returns false if it is to filter
+    int func = (frame_id & 0x7FF) >> 7;
+
+    switch (func)
+    {
+    case 0:
+        if (this->filterNMTon)
+            return (false);
+        else
+            return (true);
+        break;
+    case 1:
+        if ((frame_id & 0x7F) == 0)
+        {
+            if (this->filterSYNCon)
+                return (false);
+            else
+                return (true);
+        }
+        else
+        {
+            if (this->filterEMCYon)
+                return (false);
+            else
+                return (true);
+        }
+        break;
+    case 2:
+        if (this->filterTIMEon)
+            return (false);
+        else
+            return (true);
+        break;
+//    case 3:
+//        return "T PDO1";
+//        break;
+//    case 4:
+//        return "R PDO1";
+//        break;
+//    case 5:
+//        return "T PDO2";
+//        break;
+//    case 6:
+//        return "R PDO2";
+//        break;
+//    case 7:
+//        return "T PDO3";
+//        break;
+//    case 8:
+//        return "R PDO3";
+//        break;
+//    case 9:
+//        return "T PDO4";
+//        break;
+//    case 10://1010
+//        return "R PDO4";
+//        break;
+//    case 11://1011
+//        return "T SDO";
+//        break;
+//    case 12://1100
+//        return "R SDO";
+//        break;
+//    case 13://1101
+//        return "???";
+//        break;
+    case 14://1110
+        if (this->filterHBEATon)
+            return (false);
+        else
+            return (true);
+        break;
+//    case 15://1111
+//        return "LSS";
+//        break;
+    default:
+        return (true);
+    }
+}
+
 //End of custom sorting code
 
 void CANFrameModel::recalcOverwrite()
@@ -341,7 +423,7 @@ void CANFrameModel::recalcOverwrite()
 
     for (int i = 0; i < frames.count(); i++)
     {
-        if (filters[frames[i].frameId() & 0x7F])
+        if (filters[frames[i].frameId() & 0x7F] && filterFrameConsideringFunction(frames[i].frameId()))
         {
             filteredFrames.append(frames[i]);
         }
@@ -596,7 +678,7 @@ void CANFrameModel::addFrame(const CANFrame& frame, bool autoRefresh = false)
     if (!overwriteDups)
     {
         frames.append(tempFrame);
-        if (filters[tempFrame.frameId() & 0x7F])
+        if (filters[tempFrame.frameId() & 0x7F] && filterFrameConsideringFunction(tempFrame.frameId()))
         {
             if (autoRefresh) beginInsertRows(QModelIndex(), filteredFrames.count(), filteredFrames.count());
             tempFrame.frameCount = 1;
@@ -621,7 +703,7 @@ void CANFrameModel::addFrame(const CANFrame& frame, bool autoRefresh = false)
         if (!found)
         {
             frames.append(tempFrame);
-            if (filters[tempFrame.frameId() & 0x7F])
+            if (filters[tempFrame.frameId() & 0x7F] && filterFrameConsideringFunction(tempFrame.frameId()))
             {
                 if (autoRefresh) beginInsertRows(QModelIndex(), filteredFrames.count(), filteredFrames.count());
                 tempFrame.frameCount = 1;
@@ -668,7 +750,7 @@ void CANFrameModel::sendRefresh()
     int count = frames.count();
     for (int i = 0; i < count; i++)
     {
-        if (filters[frames[i].frameId() & 0x7F])
+        if (filters[frames[i].frameId() & 0x7F] && filterFrameConsideringFunction(frames[i].frameId()))
         {
             tempContainer.append(frames[i]);
         }
@@ -718,7 +800,7 @@ void CANFrameModel::clearFrames()
     this->beginResetModel();
     frames.clear();
     filteredFrames.clear();
-    filters.clear();
+//    filters.clear();
     frames.reserve(preallocSize);
     filteredFrames.reserve(preallocSize);
     this->endResetModel();
@@ -749,7 +831,7 @@ void CANFrameModel::insertFrames(const QVector<CANFrame> &newFrames)
             filters.insert(newFrames[i].frameId() & 0x7F, true);
             needFilterRefresh = true;
         }
-        if (filters[newFrames[i].frameId() & 0x7F])
+        if (filters[newFrames[i].frameId() & 0x7F] && filterFrameConsideringFunction(newFrames[i].frameId()))
         {
             insertedFiltered++;
             filteredFrames.append(newFrames[i]);
@@ -851,5 +933,7 @@ const QVector<CANFrame>* CANFrameModel::getFilteredListReference() const
 
 const QMap<int, bool>* CANFrameModel::getFiltersReference() const
 {
+//    printf("******** %d\n", this->filterNMTon);
+//    fflush(stdout);
     return &filters;
 }

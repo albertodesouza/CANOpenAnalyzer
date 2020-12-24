@@ -104,6 +104,16 @@ private slots:
     void headerClicked (int logicalIndex);
     void DBCSettingsUpdated();
 
+    void on_filterNMT_stateChanged(int arg1);
+
+    void on_filterSYNC_stateChanged(int arg1);
+
+    void on_filterEMCY_stateChanged(int arg1);
+
+    void on_filterHBEAT_stateChanged(int arg1);
+
+    void on_filterTIME_stateChanged(int arg1);
+
 public slots:
     void gotFrames(int);
     void updateSettings();

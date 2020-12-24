@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>682</height>
+    <width>826</width>
+    <height>852</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -230,6 +230,41 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="filterNMT">
+        <property name="text">
+         <string>Filter NMT</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="filterSYNC">
+        <property name="text">
+         <string>Filter SYNC</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="filterEMCY">
+        <property name="text">
+         <string>Filter EMCY</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="filterHBEAT">
+        <property name="text">
+         <string>Filter HBEAT</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="filterTIME">
+        <property name="text">
+         <string>Filter TIME</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="Line" name="line_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -268,16 +303,16 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QPushButton" name="btnFilterAll">
+         <widget class="QPushButton" name="btnFilterNone">
           <property name="text">
-           <string>All</string>
+           <string>None</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnFilterNone">
+         <widget class="QPushButton" name="btnFilterAll">
           <property name="text">
-           <string>None</string>
+           <string>All</string>
           </property>
          </widget>
         </item>
@@ -292,7 +327,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>826</width>
      <height>22</height>
     </rect>
    </property>

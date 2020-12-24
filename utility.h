@@ -123,7 +123,7 @@ public:
         else
         {
             int func = (id & 0x7FF) >> 7;
-            switch(func)
+            switch (func)
             {
             case 0:
                 return "NMT";

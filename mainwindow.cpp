@@ -1160,3 +1160,48 @@ void MainWindow::showConnectionSettingsWindow()
     }
     connectionWindow->show();
 }
+
+void MainWindow::on_filterNMT_stateChanged(int arg1)
+{
+    arg1 = ui->filterNMT->isChecked();
+    if (arg1)
+        model->set_filterNMTon(true);
+    else
+        model->set_filterNMTon(false);
+}
+
+void MainWindow::on_filterSYNC_stateChanged(int arg1)
+{
+    arg1 = ui->filterSYNC->isChecked();
+    if (arg1)
+        model->set_filterSYNCon(true);
+    else
+        model->set_filterSYNCon(false);
+}
+
+void MainWindow::on_filterEMCY_stateChanged(int arg1)
+{
+    arg1 = ui->filterEMCY->isChecked();
+    if (arg1)
+        model->set_filterEMCYon(true);
+    else
+        model->set_filterEMCYon(false);
+}
+
+void MainWindow::on_filterHBEAT_stateChanged(int arg1)
+{
+    arg1 = ui->filterHBEAT->isChecked();
+    if (arg1)
+        model->set_filterHBEATon(true);
+    else
+        model->set_filterHBEATon(false);
+}
+
+void MainWindow::on_filterTIME_stateChanged(int arg1)
+{
+    arg1 = ui->filterTIME->isChecked();
+    if (arg1)
+        model->set_filterTIMEon(true);
+    else
+        model->set_filterTIMEon(false);
+}
