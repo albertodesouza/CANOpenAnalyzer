@@ -87,6 +87,9 @@
          <property name="text">
           <string>Never Expire IDs</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -100,6 +103,9 @@
         <widget class="QCheckBox" name="cbFadeInactive">
          <property name="text">
           <string>Fade inactive bytes</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
