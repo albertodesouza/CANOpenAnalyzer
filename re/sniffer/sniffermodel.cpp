@@ -4,6 +4,7 @@
 #include "sniffermodel.h"
 #include "snifferwindow.h"
 #include "SnifferDelegate.h"
+#include "../../utility.h"
 
 SnifferModel::SnifferModel(QObject *parent)
     : QAbstractItemModel(parent),
@@ -61,7 +62,11 @@ QVariant SnifferModel::data(const QModelIndex &index, int role) const
                 case tc::DELTA:
                     return QString::number(item->getDelta(), 'f');
                 case tc::ID:
-                    return QString("%1").arg(item->getId(), 5, 16, QLatin1Char(' ')).toUpper();
+                    return "0x" + QString("%1").arg(item->getId(), 3, 16, QLatin1Char('0')).toUpper();
+                case tc::FUNC:
+                    return Utility::formatCANOpenFunction(item->getId(), false);
+                case tc::NOD:
+                    return "0x" + QString("%1").arg(item->getId() & 0x7F, 2, 16, QLatin1Char('0')).toUpper();
                 default:
                     break;
             }
@@ -109,7 +114,7 @@ QVariant SnifferModel::data(const QModelIndex &index, int role) const
                 switch(change)
                 {
                     case dc::INC:
-                        if (!mDarkMode) return QBrush(Qt::green);
+                        if (!mDarkMode) return QBrush(Qt::red);
                         return QBrush(QColor(0,128,0));
                     case dc::DEINC:
                         if (!mDarkMode) return QBrush(Qt::red);
@@ -145,6 +150,10 @@ QVariant SnifferModel::headerData(int section, Qt::Orientation orientation, int 
                 return QString("Delta");
             case tc::ID:
                 return QString("ID");
+            case tc::FUNC:
+                return QString("Func");
+            case tc::NOD:
+                return QString("Node");
             default:
                 break;
         }

@@ -14,6 +14,8 @@ enum tc
 {
     DELTA = 0,
     ID,
+    NOD,
+    FUNC,
     DATA_0,
     DATA_1,
     DATA_2,

@@ -53,7 +53,7 @@ QListWidgetItem * FilterUtility::createFilterItem(int32_t id, QListWidget* paren
     QSettings settings;
     DBCHandler * dbcHandler = DBCHandler::getReference();
     QListWidgetItem *thisItem = new QListWidgetItem(parent);
-    QString filterItemName = Utility::formatCANID(id);
+    QString filterItemName = Utility::formatCANOpenNode(id, false);
 
     //Note, there are multiple filter labeling preferences. There is one in main settings to globally
     //enable or disable them all. Then each loaded DBC file also can be selected on/off

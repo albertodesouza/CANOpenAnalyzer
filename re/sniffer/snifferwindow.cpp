@@ -76,6 +76,8 @@ void SnifferWindow::readSettings()
         move(settings.value("Sniffer/WindowPos", QPoint(50, 50)).toPoint());
         ui->treeView->setColumnWidth(0, settings.value("Sniffer/DeltaColumn", 110).toUInt());
         ui->treeView->setColumnWidth(1, settings.value("Sniffer/IDColumn", 70).toUInt());
+        ui->treeView->setColumnWidth(1, settings.value("Sniffer/NODColumn", 70).toUInt());
+        ui->treeView->setColumnWidth(1, settings.value("Sniffer/FUNCColumn", 70).toUInt());
         ui->treeView->setColumnWidth(2, settings.value("Sniffer/Data0Column", 92).toUInt());
         ui->treeView->setColumnWidth(3, settings.value("Sniffer/Data1Column", 92).toUInt());
         ui->treeView->setColumnWidth(4, settings.value("Sniffer/Data2Column", 92).toUInt());
@@ -97,14 +99,16 @@ void SnifferWindow::writeSettings()
         settings.setValue("Sniffer/WindowPos", pos());
         settings.setValue("Sniffer/DeltaColumn", ui->treeView->columnWidth(0));
         settings.setValue("Sniffer/IDColumn", ui->treeView->columnWidth(1));
-        settings.setValue("Sniffer/Data0Column", ui->treeView->columnWidth(2));
-        settings.setValue("Sniffer/Data1Column", ui->treeView->columnWidth(3));
-        settings.setValue("Sniffer/Data2Column", ui->treeView->columnWidth(4));
-        settings.setValue("Sniffer/Data3Column", ui->treeView->columnWidth(5));
-        settings.setValue("Sniffer/Data4Column", ui->treeView->columnWidth(6));
-        settings.setValue("Sniffer/Data5Column", ui->treeView->columnWidth(7));
-        settings.setValue("Sniffer/Data6Column", ui->treeView->columnWidth(8));
-        settings.setValue("Sniffer/Data7Column", ui->treeView->columnWidth(9));
+        settings.setValue("Sniffer/NODColumn", ui->treeView->columnWidth(2));
+        settings.setValue("Sniffer/FUNCColumn", ui->treeView->columnWidth(3));
+        settings.setValue("Sniffer/Data0Column", ui->treeView->columnWidth(4));
+        settings.setValue("Sniffer/Data1Column", ui->treeView->columnWidth(5));
+        settings.setValue("Sniffer/Data2Column", ui->treeView->columnWidth(6));
+        settings.setValue("Sniffer/Data3Column", ui->treeView->columnWidth(7));
+        settings.setValue("Sniffer/Data4Column", ui->treeView->columnWidth(8));
+        settings.setValue("Sniffer/Data5Column", ui->treeView->columnWidth(9));
+        settings.setValue("Sniffer/Data6Column", ui->treeView->columnWidth(10));
+        settings.setValue("Sniffer/Data7Column", ui->treeView->columnWidth(11));
     }
 }
 

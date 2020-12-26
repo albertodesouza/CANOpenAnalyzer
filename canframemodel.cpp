@@ -473,6 +473,8 @@ QVariant CANFrameModel::data(const QModelIndex &index, int role) const
         case Column::TimeStamp:
             return Qt::AlignRight;
         case Column::FrameId:
+        case Column::CANOpenFunction:
+        case Column::CANOpenNode:
         case Column::Direction:
         case Column::Extended:
         case Column::Bus:
@@ -583,6 +585,8 @@ QVariant CANFrameModel::data(const QModelIndex &index, int role) const
                     }
                 }
             }
+//            tempString = "<html><body><p><i>This text is italic</i></p></body></html>";
+//            tempString = tempString.toHtmlEscaped();
             return tempString;
         case Column::CANOpenFunction:
             return Utility::formatCANOpenFunction(thisFrame.frameId(), thisFrame.hasExtendedFrameFormat());
