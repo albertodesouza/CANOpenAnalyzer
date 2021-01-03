@@ -71,6 +71,8 @@ public:
     void set_filterTIMEon(bool state) {filterTIMEon = state; sendRefresh();};
     bool filterFrameConsideringFunction(int frame_id);
 
+    QString printSDO(int sdo, const unsigned char *data) const;
+
 public slots:
     void addFrame(const CANFrame&, bool);
     void addFrames(const CANConnection*, const QVector<CANFrame>&);
@@ -105,6 +107,7 @@ private:
     int lastUpdateNumFrames;
     uint32_t preallocSize;
     bool sortDirAsc;
+    QString printIndexSubIndex(const unsigned char *data) const;
 };
 
 

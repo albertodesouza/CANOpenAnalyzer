@@ -520,7 +520,7 @@ void MainWindow::updateFilterList()
     QMap<int, bool>::const_iterator filterIter;
     for (filterIter = filters->begin(); filterIter != filters->end(); ++filterIter)
     {
-        /*QListWidgetItem *thisItem = */FilterUtility::createCheckableFilterItem(filterIter.key(), filterIter.value(), ui->listFilters);
+        /*QListWidgetItem *thisItem = */FilterUtility::createCheckableCANOpenFilterItem(filterIter.key(), filterIter.value(), ui->listFilters);
     }
     inhibitFilterUpdate = false;
 }

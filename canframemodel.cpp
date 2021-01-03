@@ -433,6 +433,145 @@ void CANFrameModel::recalcOverwrite()
     mutex.unlock();
 }
 
+QString CANFrameModel::printIndexSubIndex(const unsigned char *data) const
+{
+    QString tempString;
+
+    tempString.append("I [0x");
+    tempString.append(QString::number(256 * data[2] + data[1], 16));
+    tempString.append(" (");
+    tempString.append(QString::number(256 * data[2] + data[1], 10));
+    tempString.append(")] SI [");
+    tempString.append(QString::number(data[3], 10));
+    tempString.append("]");
+
+    return (tempString);
+}
+
+QString CANFrameModel::printSDO(int sdo, const unsigned char *data) const
+{
+    QString tempString;
+
+    if (sdo)
+    {
+        int ccs = data[0] >> 5;
+        if (sdo == 1)   // T SDO -> Server
+        {
+            tempString.append("Server - ");
+            tempString.append(printIndexSubIndex(data));
+
+            switch (ccs)
+            {
+            case 0:
+            case 1:
+                if (ccs == 1)
+                    tempString.append(", Download Domain Segment, ");
+                else
+                    tempString.append(", Upload Domain Segment, ");
+                {
+                    int t = (data[0] >> 4) & 0x1;
+                    int n = (data[0] >> 1) & 0x7;
+                    int c = data[0] & 0x1;
+                    tempString.append("n = ");
+                    tempString.append(QString::number(8-n, 10));
+                    if (c)
+                        tempString.append(", more to download");
+                    if (t)
+                        tempString.append(", t = 1");
+                    else
+                        tempString.append(", t = 0");
+                }
+                break;
+            case 2:
+            case 3:
+                if (ccs == 3)
+                    tempString.append(", Initiate Domain Download");
+                else
+                    tempString.append(", Initiate Domain Upload");
+                {
+                    int n = (data[0] >> 2) & 0x3;
+                    int e = (data[0] >> 1) & 0x1;
+                    int s = data[0] & 0x1;
+                    if (e && s)
+                    {
+                        tempString.append(", expedited, n = ");
+                        tempString.append(QString::number(4-n, 10));
+                    }
+                    else if (s)
+                    {
+                        tempString.append(QString::number(data[4] + 256 * data[7], 10));
+                    }
+                }
+                break;
+            case 4:
+                tempString.append(", Abort Domain Transfer");
+                break;
+            case 6:
+                tempString.append(", Initiate Block Download");
+                break;
+            }
+        }
+        else            // R SDO -> Client
+        {
+            tempString.append("Client - ");
+            tempString.append(printIndexSubIndex(data));
+
+            switch (ccs)
+            {
+            case 0:
+            case 3:
+                if (ccs == 0)
+                    tempString.append(", Download Domain Segment, ");
+                else
+                    tempString.append(", Upload Domain Segment, ");
+                {
+                    int t = (data[0] >> 4) & 0x1;
+                    int n = (data[0] >> 1) & 0x7;
+                    int c = data[0] & 0x1;
+                    tempString.append("n = ");
+                    tempString.append(QString::number(8-n, 10));
+                    if (c)
+                        tempString.append(", more to download");
+                    if (t)
+                        tempString.append(", t = 1");
+                    else
+                        tempString.append(", t = 0");
+                }
+                break;
+            case 1:
+            case 2:
+                if (ccs == 1)
+                    tempString.append(", Initiate Domain Download");
+                else
+                    tempString.append(", Initiate Domain Upload");
+                {
+                    int n = (data[0] >> 2) & 0x3;
+                    int e = (data[0] >> 1) & 0x1;
+                    int s = data[0] & 0x1;
+                    if (e && s)
+                    {
+                        tempString.append(", expedited, n = ");
+                        tempString.append(QString::number(4-n, 10));
+                    }
+                    else if (s)
+                    {
+                        tempString.append(QString::number(data[4] + 256 * data[7], 10));
+                    }
+                }
+                break;
+            case 4:
+                tempString.append(", Abort Domain Transfer");
+                break;
+            case 6:
+                tempString.append(", Initiate Block Download");
+                break;
+            }
+        }
+    }
+
+    return (tempString);
+}
+
 QVariant CANFrameModel::data(const QModelIndex &index, int role) const
 {
     QString tempString;
@@ -535,17 +674,14 @@ QVariant CANFrameModel::data(const QModelIndex &index, int role) const
                 tempString.append(QString::number(thisFrame.frameId() & 0x7));
                 return tempString;
             }
-            if (thisFrame.frameType() != QCanBusFrame::RemoteRequestFrame) {
-                if (dataLen < 0) dataLen = 0;
-                //if (dLen > 8) dLen = 8;
-                for (int i = 0; i < dataLen; i++)
-                {
-                    char byt = thisFrame.payload()[i];
-                    //0x20 through 0x7E are printable characters. Outside of that range they aren't. So use dots instead
-                    if (byt < 0x20) byt = 0x2E; //dot character
-                    if (byt > 0x7E) byt = 0x2E;
-                    tempString.append(QString::fromUtf8(&byt, 1));
-                }
+            if (thisFrame.frameType() == QCanBusFrame::RemoteRequestFrame)
+            {
+                tempString = "Remote request frame";
+            }
+            else
+            {
+                int sdo = Utility::isSDO(thisFrame.frameId());
+                tempString = printSDO(sdo, data);
             }
             return tempString;
         case Column::Data:
@@ -614,7 +750,7 @@ QVariant CANFrameModel::headerData(int section, Qt::Orientation orientation,
             if (overwriteDups) return QString(tr("Time Delta"));
             return QString(tr("Timestamp"));
         case Column::FrameId:
-            return QString(tr("ID"));
+            return QString(tr("COB-ID"));
         case Column::Extended:
             return QString(tr("Ext"));
         case Column::Remote:

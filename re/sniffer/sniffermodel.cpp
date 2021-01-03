@@ -80,6 +80,7 @@ QVariant SnifferModel::data(const QModelIndex &index, int role) const
             }
             break;
         }
+
         case Qt::ForegroundRole:
         {
             if (!mFadeInactive ||  col < tc::DATA_0) return QApplication::palette().brush(QPalette::Text);
@@ -125,6 +126,21 @@ QVariant SnifferModel::data(const QModelIndex &index, int role) const
             }
             break;
         }
+
+        case Qt::TextAlignmentRole:
+        {
+            switch (col)
+            {
+                case tc::DELTA:
+                case tc::ID:
+                case tc::FUNC:
+                case tc::NOD:
+                    return Qt::AlignHCenter;
+                default:
+                    return Qt::AlignHCenter;
+            }
+            break;
+        }
     }
 
     return QVariant();
@@ -149,7 +165,7 @@ QVariant SnifferModel::headerData(int section, Qt::Orientation orientation, int 
             case tc::DELTA:
                 return QString("Delta");
             case tc::ID:
-                return QString("ID");
+                return QString("COB-ID");
             case tc::FUNC:
                 return QString("Func");
             case tc::NOD:

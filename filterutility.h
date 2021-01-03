@@ -9,7 +9,9 @@ class FilterUtility
 
 public:
     static QListWidgetItem * createFilterItem(int32_t id, QListWidget* parent=NULL);   // if parent is given, add item automatically to listwidget
+    static QListWidgetItem * createCANOpenFilterItem(int32_t id, QListWidget* parent=NULL);   // if parent is given, add item automatically to listwidget
     static QListWidgetItem * createCheckableFilterItem(int32_t id, bool checked, QListWidget* parent=NULL);
+    static QListWidgetItem * createCheckableCANOpenFilterItem(int32_t id, bool checked, QListWidget* parent=NULL);
 
     static uint32_t getIdAsInt( QListWidgetItem * item );
     static QString getId( QListWidgetItem * item );

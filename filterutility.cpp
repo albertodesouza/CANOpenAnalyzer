@@ -37,13 +37,59 @@ uint32_t FilterUtility::getGMLanSenderId(int32_t id)
     return id & 0x1FFF;
 }
 
+QListWidgetItem * FilterUtility::createCheckableCANOpenFilterItem(int32_t id, bool checked, QListWidget* parent)
+{
+    QListWidgetItem * thisItem = createCANOpenFilterItem(id,parent);
+    thisItem->setFlags(thisItem->flags() | Qt::ItemIsUserCheckable);
+    if (checked)
+        thisItem->setCheckState(Qt::Checked);
+    else
+        thisItem->setCheckState(Qt::Unchecked);
+    return thisItem;
+}
+
+QListWidgetItem * FilterUtility::createCANOpenFilterItem(int32_t id, QListWidget* parent)
+{
+    QSettings settings;
+    DBCHandler * dbcHandler = DBCHandler::getReference();
+    QListWidgetItem *thisItem = new QListWidgetItem(parent);
+//    QString filterItemName = Utility::formatCANID(id);
+    QString filterItemName = Utility::formatCANOpenNode(id, false);
+
+    //Note, there are multiple filter labeling preferences. There is one in main settings to globally
+    //enable or disable them all. Then each loaded DBC file also can be selected on/off
+    //Both must be enabled for you to see labeling.
+    if (settings.value("Main/FilterLabeling", false).toBool())
+    {
+        // Filter labeling (show interpreted frame names next to the CAN addr ID)
+        MatchingCriteria_t matchingCriteria;
+        DBC_MESSAGE *msg = dbcHandler->findMessageForFilter(id,&matchingCriteria);
+        if (msg != nullptr)
+        {
+            filterItemName.append(" ");
+            filterItemName.append(msg->name);
+
+            // Create tooltip to show the whole name just in case it's too long to fit in the filter window.
+            // Also if the matching criteria is set to GMLAN, show the Arbitration ID as well
+            QString tooltip;
+            if (matchingCriteria == GMLAN)
+                tooltip.append("0x" + QString::number(FilterUtility::getGMLanArbitrationId(id), 16).toUpper().rightJustified(4,'0') + ": ");
+            tooltip.append(msg->name);
+            thisItem->setToolTip(tooltip);
+        }
+    }
+
+    thisItem->setText(filterItemName);
+    return thisItem;
+}
+
 QListWidgetItem * FilterUtility::createCheckableFilterItem(int32_t id, bool checked, QListWidget* parent)
 {
     QListWidgetItem * thisItem = createFilterItem(id,parent);
     thisItem->setFlags(thisItem->flags() | Qt::ItemIsUserCheckable);
-    if (checked) 
+    if (checked)
         thisItem->setCheckState(Qt::Checked);
-    else 
+    else
         thisItem->setCheckState(Qt::Unchecked);
     return thisItem;
 }
@@ -53,7 +99,8 @@ QListWidgetItem * FilterUtility::createFilterItem(int32_t id, QListWidget* paren
     QSettings settings;
     DBCHandler * dbcHandler = DBCHandler::getReference();
     QListWidgetItem *thisItem = new QListWidgetItem(parent);
-    QString filterItemName = Utility::formatCANOpenNode(id, false);
+    QString filterItemName = Utility::formatCANID(id);
+//    QString filterItemName = Utility::formatCANOpenNode(id, false);
 
     //Note, there are multiple filter labeling preferences. There is one in main settings to globally
     //enable or disable them all. Then each loaded DBC file also can be selected on/off

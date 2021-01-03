@@ -147,7 +147,10 @@
           </size>
          </property>
          <property name="title">
-          <string>Filters:</string>
+          <string>COB-ID Filter</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <property name="sizeConstraint">
